@@ -8,7 +8,7 @@ float AccErrorX, AccErrorY, AccErrorZ;
 float currentTime, previousTime;
 int elapsedTime = 0;
 
-const int indexButtonPin = 8;
+const int indexButtonPin = A1;
 const int middleButtonPin = A2;
   
 int indexButtonState = 0;
