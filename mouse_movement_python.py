@@ -1,51 +1,65 @@
 import pyautogui
 import serial
+import time
 
-sensX = 100
-sensY = 100
+sensitivity = 5
+sensX = 20
+sensY = 20
 scrolling = 3
 noScroll = 0
+
+indexButtonState  = 0
+middleButtonState = 0
 
 movX = 0
 movY = 0
 scroll = 0
 
-xVal = 200 # read input of the accelerometer in X-axis
-yVal = 200 # read input of the accelerometer in Y-axis
-
-
 baud_rate = 115200; #In arduino, Serial.begin(baud_rate)
 serial_port = serial.Serial('COM3', baudrate = baud_rate)
 
+time.sleep(1)
+
 while(1):
-  arduinoData = serial_port.readline().split()
-  
-  
-  xVal = arduinoData[0] # read input of the accelerometer in X-axis
-  yVal = arduinoData[1] # read input of the accelerometer in Y-axis
-  indexButtonState = arduinoData[3]
-  middleButtonState = arduinoData[4]
+  try:
+    arduinoData = serial_port.readline().decode('ASCII')
+
+    arduinoData = arduinoData.split(' ')
+
+    xVal = float(arduinoData[0])
+    yVal = float(arduinoData[1])
+
+    prevIndexButtonState = indexButtonState
+    indexButtonState  = int(arduinoData[3][0])
+
+    prevMiddleButtonState = middleButtonState
+    middleButtonState = int(arduinoData[4][0])
+
+    print(arduinoData)
+  except:
+    continue
+  #print(xVal)
   
   #indexButtonState reading from file
   #middleButtonState reading from file
-
-  if ((indexButtonState and middleButtonState) and ((yVal < -200) or (yVal > 200))):
-    if (yVal > 0):
-      scroll = scrolling
-    else:
-      scroll = -1 * scrolling
-  else:
-    scroll = noScroll
-    if (indexButtonState):
-      pyautogui.mouseDown(button = 'left')
-    elif (not indexButtonState):
-      pyautogui.mouseUp(button = 'left')
-    elif (middleButtonState):
-      pyautogui.mouseDown(button = 'right')
-    elif (not middleButtonState):
-      pyautogui.mouseUp(button = 'right')
-    if (((xVal < -100) or (xVal > 100)) or ((yVal < -100) or (yVal > 100))):
-      movX = xVal/sensX
-      movY = -yVal/sensY
-  pyautogui.move(movX, movY)
-  pyautogui.scroll(scroll)
+  if(((xVal < -10/sensitivity) or (xVal > 10/sensitivity)) or ((yVal < -10/sensitivity) or (yVal > 10/sensitivity))):
+    movX = xVal/sensX
+    movY = -yVal/sensY
+    pyautogui.move(movX, movY)
+    
+  # if ((indexButtonState and middleButtonState)):
+  #     if (yVal > 0):
+  #       scroll = scrolling
+  #     else:
+  #       scroll = -1 * scrolling
+  # else:
+  #   scroll = noScroll
+  if (indexButtonState):
+    pyautogui.mouseDown(button = 'left')
+  elif (prevIndexButtonState == 1):
+    pyautogui.mouseUp(button = 'left')
+  if (middleButtonState):
+    pyautogui.mouseDown(button = 'right')
+  elif (prevMiddleButtonState == 1):
+    pyautogui.mouseUp(button = 'right')
+  #pyautogui.scroll(scroll)
