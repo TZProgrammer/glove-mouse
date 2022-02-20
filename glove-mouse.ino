@@ -60,7 +60,7 @@ void loop()
   
   if(Serial.available() > 0){
 
-    delay(10);
+    delay(5);
     i=0;
     serialFlush();
     
