@@ -53,14 +53,14 @@ void loop()
 {
   Vector rawAccel = mpu.readRawAccel();
   totalAcceleration = (rawAccel.XAxis - AccErrorX)*(rawAccel.XAxis - AccErrorX)+(rawAccel.YAxis - AccErrorY)*(rawAccel.YAxis - AccErrorY);
-  if(totalAcceleration < 1000 || totalAcceleration > 200000){
+  if(totalAcceleration < 1000 || totalAcceleration > 40000){
     calculate_IMU_error();
     totalAcceleration = 2000;
   }
   
   if(Serial.available() > 0){
 
-    delay(5);
+    delay(3);
     i=0;
     serialFlush();
     

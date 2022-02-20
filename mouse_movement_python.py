@@ -38,10 +38,10 @@ while(1):
     yVal = float(arduinoData[1])
 
     tVelocity = (xVelocity**2+yVelocity**2)**(1/2)
-    xVelocity += xVal/20
-    xVelocity -= 1/100*tVelocity
-    yVelocity += yVal/20
-    yVelocity -= 1/100*tVelocity
+    xVelocity += xVal/15
+    xVelocity -= 1/20*xVelocity
+    yVelocity += yVal/15
+    yVelocity -= 1/20*yVelocity
 
     print(xVal)
 
