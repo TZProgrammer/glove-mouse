@@ -36,10 +36,13 @@ while(1):
     xVal = float(arduinoData[0])
     yVal = float(arduinoData[1])
 
+  
     xVelocity += xVal/10
     yVelocity += yVal/10
 
-    if ((xVal > -20) and (xVal < 20) and (yVal > -20) and (yVal < 20) or ((xVelocity > -20) and (xVelocity < 20) and (yVelocity > -20) and (yVelocity < 20))):
+    print(xVal)
+
+    if ((xVal > -100) and (xVal < 100) and (yVal > -100) and (yVal < 100) and ((xVelocity > -60) and (xVelocity < 60) and (yVelocity > -60) and (yVelocity < 60))):
       xVelocity = 0
       yVelocity = 0
 
@@ -57,7 +60,7 @@ while(1):
   
   #indexButtonState reading from file
   #middleButtonState reading from file
-  if(((xVal < -10/sensitivity) or (xVal > 10/sensitivity)) or ((yVal < -10/sensitivity) or (yVal > 10/sensitivity))) or (((xVal > -200/sensitivity) or (xVal < 200/sensitivity)) or ((yVal > -200/sensitivity) or (yVal < 200/sensitivity))):
+  if(((xVal < -10/sensitivity) or (xVal > 10/sensitivity)) or ((yVal < -10/sensitivity) or (yVal > 10/sensitivity))):
     movX = xVelocity/sensX
     movY = yVelocity/sensY
     pyautogui.move(movX, movY)

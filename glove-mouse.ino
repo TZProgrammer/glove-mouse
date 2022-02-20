@@ -6,7 +6,7 @@ float ShiftedAccX, ShiftedAccY, ShiftedAccZ;
 float AccX = 0, AccY = 0, AccZ = 0, totalAcceleration = 0;
 float AccErrorX, AccErrorY, AccErrorZ;
 float currentTime, previousTime;
-int elapsedTime = 0;
+int elapsedTime = 0, i = 0;
 
 const int indexButtonPin = A1;
 const int middleButtonPin = A2;
@@ -51,24 +51,26 @@ void setup()
 
 void loop()
 {
-  if(totalAcceleration < 1000 || totalAcceleration > 45000){
+  Vector rawAccel = mpu.readRawAccel();
+  totalAcceleration = (rawAccel.XAxis - AccErrorX)*(rawAccel.XAxis - AccErrorX)+(rawAccel.YAxis - AccErrorY)*(rawAccel.YAxis - AccErrorY);
+  if(totalAcceleration < 1000 || totalAcceleration > 200000){
     calculate_IMU_error();
-    totalAcceleration = 1500;
+    totalAcceleration = 2000;
   }
-
+  
   if(Serial.available() > 0){
 
     delay(10);
+    i=0;
     serialFlush();
     
     indexButtonState = digitalRead(indexButtonPin);
     middleButtonState = digitalRead(middleButtonPin);
   
-    Vector rawAccel = mpu.readRawAccel();
     AccX = rawAccel.XAxis - AccErrorX;
     AccY = rawAccel.YAxis - AccErrorY;
     AccZ = rawAccel.ZAxis - AccErrorZ;
-    totalAcceleration = AccX*AccX+AccY*AccY+AccZ*AccZ;
+    
 
     Serial.print(AccX);
     Serial.print(" ");
@@ -116,7 +118,9 @@ void calculate_IMU_error() {
 }
 
 void serialFlush(){
-  while(Serial.available() > 0) {
+  while(Serial.available() != 0 && i <10) {
+    Serial.println("aaa");
     char t = Serial.read();
+    i++;
   }
 }
