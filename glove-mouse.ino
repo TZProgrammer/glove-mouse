@@ -58,7 +58,7 @@ void loop()
 
   if(Serial.available() > 0){
 
-    delay(100);
+    delay(10);
     serialFlush();
     
     indexButtonState = digitalRead(indexButtonPin);
