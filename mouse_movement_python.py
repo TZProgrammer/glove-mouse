@@ -2,9 +2,9 @@ import pyautogui
 import serial
 import time
 
-sensitivity = 5
-sensX = 20
-sensY = 20
+sensitivity = 3
+sensX = 2
+sensY = 2
 scrolling = 3
 noScroll = 0
 
@@ -42,7 +42,7 @@ while(1):
   
   #indexButtonState reading from file
   #middleButtonState reading from file
-  if(((xVal < -10/sensitivity) or (xVal > 10/sensitivity)) or ((yVal < -10/sensitivity) or (yVal > 10/sensitivity))):
+  if(((xVal < -10/sensitivity) or (xVal > 10/sensitivity)) or ((yVal < -10/sensitivity) or (yVal > 10/sensitivity))) or (((xVal > -200/sensitivity) or (xVal < 200/sensitivity)) or ((yVal > -200/sensitivity) or (yVal < 200/sensitivity))):
     movX = xVal/sensX
     movY = -yVal/sensY
     pyautogui.move(movX, movY)
