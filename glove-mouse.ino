@@ -6,12 +6,12 @@
     (c) 2014 by Korneliusz Jarzebski
 */
 
-#include <Wire.h>
 #include <MPU6050.h>
 
 MPU6050 mpu;
 
-float AccX, AccY, AccZ;
+float ShiftedAccX, ShiftedAccY, ShiftedAccZ;
+float AccX = 0, AccY = 0, AccZ = 0;
 float AccErrorX, AccErrorY, AccErrorZ;
 float elapsedTime, currentTime, previousTime;
 int c = 0;
@@ -66,13 +66,17 @@ void checkOffsets()
 void loop()
 {
   Vector rawAccel = mpu.readRawAccel();
+  AccX = rawAccel.XAxis - AccErrorX;
+  AccY = rawAccel.YAxis - AccErrorY;
+  AccZ = rawAccel.ZAxis - AccErrorZ;
 
+  
   Serial.print("AccErrorX: ");
-  Serial.println(rawAccel.XAxis-AccErrorX);
+  Serial.println(AccX);
   Serial.print("AccErrorY: ");
-  Serial.println(rawAccel.YAxis-AccErrorY);
+  Serial.println(AccY);
   Serial.print("AccErrorZ: ");
-  Serial.println(rawAccel.ZAxis-AccErrorZ);
+  Serial.println(AccZ);
 
   Serial.println();
 
@@ -81,28 +85,28 @@ void loop()
 void calculate_IMU_error() {
   // We can call this funtion in the setup section to calculate the accelerometer and gyro data error. From here we will get the error values used in the above equations printed on the Serial Monitor.
   // Note that we should place the IMU flat in order to get the proper values, so that we then can the correct values
-  // Read accelerometer values 200 times
+  // Read accelerometer values 300 times
   
   AccErrorX = 0;
   AccErrorY = 0;
   AccErrorZ = 0;
   c = 0;
-  while (c < 200) {
+  while (c < 300) {
     Vector rawAccel = mpu.readRawAccel();
-    AccX = rawAccel.XAxis;
-    AccY = rawAccel.YAxis;
-    AccZ = rawAccel.ZAxis;
+    ShiftedAccX = rawAccel.XAxis;
+    ShiftedAccY = rawAccel.YAxis;
+    ShiftedAccZ = rawAccel.ZAxis;
     // Sum all readings
-    AccErrorX = AccErrorX + AccX;
-    AccErrorY = AccErrorY + AccY;
-    AccErrorZ = AccErrorZ + AccZ;
+    AccErrorX = AccErrorX + ShiftedAccX;
+    AccErrorY = AccErrorY + ShiftedAccY;
+    AccErrorZ = AccErrorZ + ShiftedAccZ;
     c++;
   }
   
-  //Divide the sum by 200 to get the error value
-  AccErrorX = AccErrorX / 200;
-  AccErrorY = AccErrorY / 200;
-  AccErrorZ = AccErrorZ / 200;
+  //Divide the sum by 300 to get the error value
+  AccErrorX = AccErrorX / 300;
+  AccErrorY = AccErrorY / 300;
+  AccErrorZ = AccErrorZ / 300;
   c = 0;
   
   // Print the error values on the Serial Monitor
@@ -110,10 +114,6 @@ void calculate_IMU_error() {
   Serial.println(AccErrorX);
   Serial.print("AccErrorY: ");
   Serial.println(AccErrorY);
-  Serial.print("GyroErrorX: ");
-  Serial.println(GyroErrorX);
-  Serial.print("GyroErrorY: ");
-  Serial.println(GyroErrorY);
-  Serial.print("GyroErrorZ: ");
-  Serial.println(GyroErrorZ);
+  Serial.print("AccErrorZ: ");
+  Serial.println(AccErrorZ);
 }
