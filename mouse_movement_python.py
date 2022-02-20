@@ -2,6 +2,11 @@ import pyautogui
 import serial
 import time
 
+baud_rate = 115200; #In arduino, Serial.begin(baud_rate)
+serial_port = serial.Serial('COM3', baudrate = baud_rate, timeout = 1)
+
+serial_port.write('s'.encode())
+
 sensitivity = 1
 sensX = 5
 sensY = 5
@@ -15,13 +20,12 @@ movX = 0
 movY = 0
 scroll = 0
 
-baud_rate = 115200; #In arduino, Serial.begin(baud_rate)
-serial_port = serial.Serial('COM3', baudrate = baud_rate)
-
 time.sleep(1)
 
 while(1):
   try:
+    serial_port.write('s'.encode())
+  
     arduinoData = serial_port.readline().decode('ASCII')
 
     arduinoData = arduinoData.split(' ')

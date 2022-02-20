@@ -53,11 +53,14 @@ void loop()
 {
   if(totalAcceleration < 1000 || totalAcceleration > 45000){
     calculate_IMU_error();
+    totalAcceleration = 1500;
   }
-  elapsedTime += 1;
 
-  if(elapsedTime%8 == 0){
-  
+  if(Serial.available() > 0){
+
+    delay(100);
+    serialFlush();
+    
     indexButtonState = digitalRead(indexButtonPin);
     middleButtonState = digitalRead(middleButtonPin);
   
@@ -75,8 +78,11 @@ void loop()
     Serial.print(" ");
     Serial.print(indexButtonState);
     Serial.print(" ");
+    Serial.print(middleButtonState);
+    Serial.print(" ");
     Serial.print(totalAcceleration);
-    Serial.println(middleButtonState);
+    Serial.print('\n');
+    Serial.flush();
   }
 
   delay(20);
@@ -107,12 +113,10 @@ void calculate_IMU_error() {
   AccErrorY = AccErrorY / 50;
   AccErrorZ = AccErrorZ / 50;
   c = 0;
-  
-  // Print the error values on the Serial Monitor
-//  Serial.print("AccErrorX: ");
-//  Serial.println(AccErrorX);
-//  Serial.print("AccErrorY: ");
-//  Serial.println(AccErrorY);
-//  Serial.print("AccErrorZ: ");
-//  Serial.println(AccErrorZ);
+}
+
+void serialFlush(){
+  while(Serial.available() > 0) {
+    char t = Serial.read();
+  }
 }
