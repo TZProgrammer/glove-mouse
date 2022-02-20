@@ -2,9 +2,9 @@ import pyautogui
 import serial
 import time
 
-sensitivity = 3
-sensX = 2
-sensY = 2
+sensitivity = 1
+sensX = 5
+sensY = 5
 scrolling = 3
 noScroll = 0
 
@@ -35,7 +35,8 @@ while(1):
     prevMiddleButtonState = middleButtonState
     middleButtonState = int(arduinoData[4][0])
 
-    print(arduinoData)
+
+    #print(arduinoData)
   except:
     continue
   #print(xVal)
@@ -44,8 +45,9 @@ while(1):
   #middleButtonState reading from file
   if(((xVal < -10/sensitivity) or (xVal > 10/sensitivity)) or ((yVal < -10/sensitivity) or (yVal > 10/sensitivity))) or (((xVal > -200/sensitivity) or (xVal < 200/sensitivity)) or ((yVal > -200/sensitivity) or (yVal < 200/sensitivity))):
     movX = xVal/sensX
-    movY = -yVal/sensY
+    movY = yVal/sensY
     pyautogui.move(movX, movY)
+
     
   # if ((indexButtonState and middleButtonState)):
   #     if (yVal > 0):
