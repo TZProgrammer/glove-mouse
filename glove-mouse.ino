@@ -119,7 +119,6 @@ void calculate_IMU_error() {
 
 void serialFlush(){
   while(Serial.available() != 0 && i <10) {
-    Serial.println("aaa");
     char t = Serial.read();
     i++;
   }

@@ -13,6 +13,7 @@ sensY = 5
 scrolling = 3
 noScroll = 0
 
+tVelocity = 0
 xVelocity = 0
 yVelocity = 0
 
@@ -36,15 +37,17 @@ while(1):
     xVal = float(arduinoData[0])
     yVal = float(arduinoData[1])
 
-  
+    tVelocity = (xVelocity**2+yVelocity**2)**(1/2)
     xVelocity += xVal/10
+    # xVelocity -= 1/120*tVelocity
     yVelocity += yVal/10
+    # xVelocity -= 1/120*tVelocity
 
     print(xVal)
 
-    if ((xVal > -100) and (xVal < 100) and (yVal > -100) and (yVal < 100) and ((xVelocity > -60) and (xVelocity < 60) and (yVelocity > -60) and (yVelocity < 60))):
-      xVelocity = 0
-      yVelocity = 0
+    # if ((xVal > -100) and (xVal < 100) and (yVal > -100) and (yVal < 100) and ((xVelocity > -60) and (xVelocity < 60) and (yVelocity > -60) and (yVelocity < 60))):
+    #   xVelocity = 0
+    #   yVelocity = 0
 
     prevIndexButtonState = indexButtonState
     indexButtonState  = int(arduinoData[3][0])
@@ -60,7 +63,7 @@ while(1):
   
   #indexButtonState reading from file
   #middleButtonState reading from file
-  if(((xVal < -10/sensitivity) or (xVal > 10/sensitivity)) or ((yVal < -10/sensitivity) or (yVal > 10/sensitivity))):
+  if(((xVal < 5) or (xVal > -5)) or ((yVal < -5) or (yVal > 5))):
     movX = xVelocity/sensX
     movY = yVelocity/sensY
     pyautogui.move(movX, movY)
