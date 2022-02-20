@@ -1,4 +1,5 @@
 import pyautogui
+import serial
 
 sensX = 100
 sensY = 100
@@ -11,13 +12,19 @@ scroll = 0
 
 xVal = 200 # read input of the accelerometer in X-axis
 yVal = 200 # read input of the accelerometer in Y-axis
-  
-indexButtonState = 0
-middleButtonState = 0
+
+
+baud_rate = 115200; #In arduino, Serial.begin(baud_rate)
+serial_port = serial.Serial('COM3', baudrate = baud_rate)
 
 while(1):
-  xVal = 200 # read input of the accelerometer in X-axis
-  yVal = 200 # read input of the accelerometer in Y-axis
+  arduinoData = serial_port.readline().split()
+  
+  
+  xVal = arduinoData[0] # read input of the accelerometer in X-axis
+  yVal = arduinoData[1] # read input of the accelerometer in Y-axis
+  indexButtonState = arduinoData[3]
+  middleButtonState = arduinoData[4]
   
   #indexButtonState reading from file
   #middleButtonState reading from file
